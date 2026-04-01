@@ -5,8 +5,6 @@ namespace MauiAppTempoAgora
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
         public MainPage()
         {
             InitializeComponent();
@@ -24,31 +22,36 @@ namespace MauiAppTempoAgora
                     {
                         string dados_previsao = "";
 
-                        dados_previsao = $"Latitude: {t.lat} \n" +
+                        // Parte 1: Inclusão da descrição, velocidade do vento e visibilidade
+                        dados_previsao = $"Descrição: {t.description} \n" +
+                                         $"Latitude: {t.lat} \n" +
                                          $"Longitude: {t.lon} \n" +
                                          $"Nascer do Sol: {t.sunrise} \n" +
                                          $"Por do Sol: {t.sunset} \n" +
-                                         $"Temp Máx: {t.temp_max} \n" +
-                                         $"Temp Min: {t.temp_min} \n";
+                                         $"Temp Máx: {t.temp_max}°C \n" +
+                                         $"Temp Min: {t.temp_min}°C \n" +
+                                         $"Velocidade do Vento: {t.speed} m/s \n" +
+                                         $"Visibilidade: {t.visibility} metros \n";
 
                         lbl_res.Text = dados_previsao;
-
-                    } else
+                    } 
+                    else
                     {
-
                         lbl_res.Text = "Sem dados de Previsão";
                     }
-
-                } else
+                } 
+                else
                 {
-                    lbl_res.Text = "Preencha a cidade.";
+                    await DisplayAlert("Aviso", "Por favor, preencha o nome da cidade.", "OK");
                 }
-
-            } catch(Exception ex)
+            } 
+            catch(Exception ex)
             {
-                await DisplayAlert("Ops", ex.Message, "OK");
+                // Limpa o texto da label em caso de erro para não confundir o usuário
+                lbl_res.Text = ""; 
+                // Exibe o erro tratado na classe DataService
+                await DisplayAlert("Atenção", ex.Message, "OK");
             }
         }
     }
-
 }
